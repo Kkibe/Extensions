@@ -1,0 +1,24 @@
+header {
+  margin-top: 40px;
+  display: flex;
+  @media screen and (max-width: 800px) {
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo__container {
+    .logo {
+      margin-top: 10px;
+    }
+  }
+  .menu__container {
+    .menu__icon {
+      @media screen and (min-width: 800px) {
+        display: none;
+      }
+      cursor: pointer;
+      i {
+        color: $grayish_violet;
+      }
+    }
+  }
+}

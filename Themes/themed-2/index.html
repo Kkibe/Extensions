@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Themed | Extension</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <ul class="flex-center tab-style4">
+    <li class="theme active" style="background-color: #89d4fe;"><span class="material-icons-outlined">
+      1
+    </span></li>
+    <li class="theme" style="background-color: rgb(187, 244, 187);"><span class="material-icons-outlined">
+      2
+    </span></li>
+    <li class="theme" style="background-color: rgb(36, 151, 203);"><span class="material-icons-outlined">
+      3
+    </span></li>
+    <li class="theme" style="background-color: rgb(232, 105, 179);"><span class="material-icons-outlined">
+      4
+    </span></li>
+    <li class="theme" style="background-color: rgb(215, 191, 101);"><span class="material-icons-outlined">
+      5
+    </span></li>
+    <li class="theme" style="background-color: rgb(231, 148, 24);"><span class="material-icons-outlined">
+      6
+    </span></li>
+    <li class="theme" style="background-color: green;"><span class="material-icons-outlined">
+      7
+    </span></li>
+    <li class="theme" style="background-color: rgb(108, 28, 183);"><span class="material-icons-outlined">
+      8
+    </span></li>
+    <li class="theme" style="background-color: rgb(111, 128, 0);"><span class="material-icons-outlined">
+      9
+    </span></li>
+    <li class="theme" style="background-color: rgb(0, 128, 100);"><span class="material-icons-outlined">
+      10
+    </span></li>
+    <li class="theme">&nbsp;</li>
+  </ul>
+  <script>
+    const lis = document.querySelectorAll("li");
+lis.forEach((li) => {
+  li.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const target = e.currentTarget;
+    
+    if (
+      target.classList.contains("active")
+    ) {
+      return;
+    }
+    
+    document.querySelector('body').style.backgroundColor =  li.style.backgroundColor;
+    lis.forEach((item) => clearClass(item, "active"));
+    setClass(target, "active");
+  });
+});
+
+function clearClass(node, className) {
+  node.classList.remove(className);
+}
+
+function setClass(node, className) {
+  node.classList.add(className);
+}
+  </script>
+</body>
+</html>

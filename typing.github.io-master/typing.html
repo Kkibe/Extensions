@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<link rel="stylesheet" href="">
+	<style>
+		*{
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+		div#main {
+  width: 100%;
+    height: 100vh;
+    position: relative;
+    /* background-image: linear-gradient(45deg, #009688ab, #f4433675); */
+    background-color: aqua;
+}
+#center {width:100%;height:500px;display: flex;
+justify-content: center; align-items: center;
+ flex-direction: column}
+ textarea#myword {
+  /*  */
+    cursor:  pointer;
+}
+#btn,#rs {
+    padding: 14px;
+    display: inline-block;
+    background-color: black;
+    color: white;
+}
+textarea{
+  width: 50%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  resize: none;
+}
+div#ms_a {
+    width: 50%;
+    height: 80px;
+background-color: #d35400a3;
+    text-align: center;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+span#result {
+font-size: 25px;
+    color: black;
+    background-color: whitesmoke;
+    border: 5px solid black;
+    padding: 10px;
+    box-shadow: 1px 1px 4px 0px black;
+}
+h1 {
+    text-align: center;
+    /* text-decoration: underline; */
+    /* text-shadow: 2px 0px 4px black; */
+    text-shadow: 0 0 2px black;
+}
+/* p#clocktimming {
+    border: 7px solid;
+    padding: 14px;
+} */
+/* p#clocktimming {
+    position: absolute;
+    top: 7%;
+    left: 21%;
+} */
+div#time {
+    position: absolute;
+    top: 27px;
+    left: 127px;
+    border: 1px solid;
+    padding: 19px;
+    /* padding-color: red; */
+    background: aliceblue;
+    font-size: xx-large;
+    font-weight: 800;
+}
+	</style>
+
+</head>
+<body>
+
+	<div id="main">
+		<div id="time">
+		<p id="clocktimming">2:00</p>
+	</div>
+			<br><br><br>
+		<h1 style="color:black;"> WELCOME <br/><span style="color:red;"id="res"></h1>
+		<br>
+		<div id="center">
+			
+		
+		<div id="ms_a">
+		    <h2 id="msg"></h2>
+	</div>
+		    <br>
+		    <textarea id="myword"cols="100"rows="10"></textarea>
+		    <br/>
+		    <div>
+           <button id="btn">Start</button> <button id="rs">Reset</button>
+           </div>   
+           <br><br>       
+         
+		</div>
+	</div>
+	<script>
+		 document.querySelector("#res").innerHTML=localStorage.getItem("txtname");
+		const sow=[
+		"Hyper text markup language",
+		"cascading style sheet",
+		"structure query language",
+		"java is oop",
+		"c is procedural language",
+		"Stay Home and be safe",
+		"See eye to eye’ – this means agreeing with someone.",
+		"Speak of the devil – this means that the person you’re just talking about actually appears at that moment.",
+
+		];
+
+
+		const msg=document.querySelector("#msg");
+
+		const typeword=document.querySelector("#myword");
+
+		const btn=document.querySelector("#btn");
+	    const msgs=document.querySelector("#result");
+     const btn1=document.querySelector("#rs");
+		let starTime,endTime;
+	    const playGame=()=>{
+            let rn=Math.floor(Math.random()*sow.length);
+        // console.log(rn);
+            msg.innerHTML=sow[rn];
+           let date=new Date();
+           starTime=date.getTime();
+           let starttime=2;
+           let time=starttime*60;
+         let times=document.querySelector("#clocktimming");
+ 
+      var clock=setInterval(updateTime,1000);
+         function updateTime(){
+         let minutes=Math.floor(time/60);
+  	     let second=time%60;
+  		  times.innerHTML=`${minutes}:${second}`;
+  		  time--;
+  		if ( btn.innerText=="Start" ){
+             clearInterval(clock);
+       
+  		}
+  		else if (minutes=='0' && second=='0' ){
+             clearInterval(clock);
+         typeword.disabled=true;
+
+
+  		}
+  		
+  }
+           btn.innerHTML="Done";
+    
+
+           
+
+	    }
+	    
+	    const endGame=()=>{
+	    	       
+
+         let date=new Date();
+          endTime=date.getTime();
+          let tottime=((endTime-starTime)/1000);
+          // console.log(tottime);
+          let totalstr=typeword.value;
+          let wordcount=wordCounter(totalstr);
+          let speed=Math.floor((wordcount/tottime)*60);
+          let finalMsg="Your typing speed is  "+speed+" wpm , ";
+          finalMsg+=compareWords(msg.innerHTML,totalstr);
+          msg.innerHTML=finalMsg;
+
+         }
+         const res=()=>{
+         	 clearInterval(clock);
+         }
+	    const compareWords=(str1,str2)=>{
+	    	let word1=str1.split(" ");
+	    	let word2=str2.split(" ");
+	    	let cnt=0;
+	    	word1.forEach( function(item, index) {
+	    	  if(item==word2[index]){
+	    	  	cnt++;
+	    	  }	// statements
+	    	})
+	    	 let errorwords=(word1.length-cnt);
+	    	 return (cnt + " correct out of " +word1.length+ " word , total number of  error " +errorwords +"." );
+	    }
+	    const wordCounter=(str)=>{
+	    	let response=str.split(" ").length;
+	    	return response;
+
+	    }
+		btn.addEventListener('click',function(){
+			// console.log(this)
+			if(this.innerText=="Start"){
+				typeword.disabled=false;
+
+				playGame();
+			}else if(this.innerText=="Done"){
+				typeword.disabled=true;
+				 btn.innerHTML="Start";
+				
+				endGame();
+			}
+		})
+btn1.addEventListener('click',function(){
+	
+	typeword.disabled=false;
+	msg.innerHTML="";
+	typeword.value="";
+	res();
+	 // clearInterval(clock);
+
+})
+	</script>
+</body>
+</html>

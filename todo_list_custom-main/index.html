@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="theme-color" content="black">
+	<meta name="description" content="a simple to do list">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	
+    
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+	<link rel="shortcut icon" href="./todo.png" type="image/x-icon">
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="manual-content dropdown">
+			<button  onclick="myFunction()" class="dropbtn">Manual</button>
+			<div class="helpText col-12 dropdown-content" id="myDropdown">
+				<p id="first">Enter text into the input field to add items to your list.</p>
+				<p id="second">Click the item to mark it as complete.</p>
+				<p id="third">Click the "X" to remove the item from your list.</p>
+			</div>
+		  </div>
+			<div class="intro col-12">
+				<h1>Work To-Do</h1>
+				<div>
+					<div class="border1"></div>
+					<div class="border2"></div>
+				</div>
+			</div>
+		</div>
+         
+		 <script>
+			 
+			/* When the user clicks on the button, 
+			toggle between hiding and showing the dropdown content */
+			function myFunction() {
+			  document.getElementById("myDropdown").classList.toggle("show");
+			}
+			
+			// Close the dropdown if the user clicks outside of it
+			window.onclick = function(event) {
+			  if (!event.target.matches('.dropbtn')) {
+				var dropdowns = document.getElementsByClassName("dropdown-content");
+				var i;
+				for (i = 0; i < dropdowns.length; i++) {
+				  var openDropdown = dropdowns[i];
+				  if (openDropdown.classList.contains('show')) {
+					openDropdown.classList.remove('show');
+				  }
+				}
+			  }
+			}
+			</script>
+		
+
+		<div class="row">
+			<div class="col-12">
+				<input id="userInput" type="text" placeholder="New item..." maxlength="27">
+				<button id="enter">Add</button>
+			</div>
+		</div>
+
+		<!-- Empty List -->
+		<div class="row">
+			<div class="listItems col-12">
+				<ul class="col-12 offset-0 col-sm-8 offset-sm-2">
+				</ul>
+			</div>
+		</div>
+
+	</div>
+	
+	<script >
+		if('serviceWorker' in navigator){
+			navigator.serviceWorker.register('/sw.js').then(registration=>{
+				console.log("sw Registered!");
+				console.log(registration);
+			}).catch(error=>{
+				console.log("sw Registration Failed");
+				console.log(error)
+			});
+		}
+	</script>
+	<script type="text/javascript" src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Themed</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"><link rel="stylesheet" href="./style.css">
+  <link rel="manifest" href="manifest.json" />
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<canvas id="canvas"></canvas>
+<div id="titles"></div>
+<script type="x-shader/x-vertex">#version 300 es
+  #ifdef GL_FRAGMENT_PRECISION_HIGH
+  precision highp float;
+  #else
+  precision mediump float;
+  #endif
+
+  in vec2 position;
+  out vec2 texcoord;
+
+  void main(void) {
+    texcoord = position;
+    gl_Position = vec4(position, 0, 1);
+  }
+</script>
+<script type="x-shader/x-fragment" data-title="Flythrough">#version 300 es
+  /*********
+   * made by Matthias Hurrle (@atzedent)
+   */
+  #ifdef GL_FRAGMENT_PRECISION_HIGH
+  precision highp float;
+  #else
+  precision mediump float;
+  #endif
+
+  out vec4 fragColor;
+  in vec2 texcoord;
+
+  uniform vec2 resolution;
+  uniform float time;
+
+  #define T time
+  #define S smoothstep
+
+  void main(void) {
+    vec2 uv = texcoord * (resolution / max(resolution.x, resolution.y)), p = uv;
+
+    float t = T * .25 - cos(T * .5) * 1.5;
+    p *= mat2(cos(t), -sin(t), sin(t), cos(t));
+
+    vec3 col = vec3(0);
+
+    p = normalize(p) * log(length(p) * .8);
+    p = vec2(atan(p.y, p.x), length(p) * .5 + T * .5);
+
+    vec3 z = vec3(p * .5, 0);
+    float c = sin(t * .2) * .5 + .5, d = .0, k = .5, f = mix(.95, 1., fract(sin(dot(z, z) + T) * 345678.));
+
+    for(int i = 0; i < 3; i++) {
+      z.z += d * (.85 - c * .35) * f;
+
+      vec3 a = z / k;
+      d += mix(abs(.7 * dot(sin(a * 2.), cos((a * 2.).yzx)) * .5), abs(f * k * dot(sin(a), cos(a.yzx))), c);
+      k *= .25;
+    }
+
+    d = 1. - clamp(d * 1.2, .0, 1.) * 1.2;
+
+    col += d * S(2., .0, dot(uv, uv) * 1.2) * vec3(1, 2, 3) * .5;
+    col = max(col, .0);
+
+    fragColor = vec4(col, 1);
+  }
+</script>
+<script type="x-shader/x-fragment" data-title="Flower">#version 300 es
+  /*********
+   * made by Matthias Hurrle (@atzedent)
+   */
+  #ifdef GL_FRAGMENT_PRECISION_HIGH
+  precision highp float;
+  #else
+  precision mediump float;
+  #endif
+
+  out vec4 fragColor;
+  in vec2 texcoord;
+
+  uniform vec2 resolution;
+  uniform float time;
+
+  #define T time
+  #define hue(a)(.24 + .4 * cos(10.3 * (a) + vec3(0, 83, 21)))
+
+  float circle(vec2 p, float s) {
+    return length(p) - s;
+  }
+
+  vec2 toRect(vec2 p) {
+    return vec2(p.x * cos(p.y), p.x * sin(p.y));
+  }
+
+  void main(void) {
+    vec2 uv = texcoord * (resolution / max(resolution.x, resolution.y));
+    float t = T * .25 + sin(T * .5) * .2;
+
+    uv *= mat2(cos(t), -sin(t), sin(t), cos(t));
+    uv *= 1. + (8. * (sin(t) * .5 + .5));
+
+    vec3 c = hue(log(length(uv) * 3.) - t * 4.);
+    float n = 5.;
+
+    uv = (fract(uv / n - .5) - .5) * n;
+    c += hue(log(length(uv) * 3.) - t * 4.);
+    uv = vec2(length(uv) - T, atan(uv.y, uv.x) / 6.2831853 * 36.);
+    uv = mod(uv, 2.) - 1.;
+
+    vec3 col = vec3(0);
+
+    col += step(max(circle(uv, .65), -max(circle(uv, .55), -circle(toRect(uv), .125))), .1);
+    col *= c;
+
+    fragColor = vec4(col, 1);
+  }
+</script>
+<script type="x-shader/x-fragment" data-title="Bloom">#version 300 es
+  /*********
+   * made by Matthias Hurrle (@atzedent)
+   */
+  #ifdef GL_FRAGMENT_PRECISION_HIGH
+  precision highp float;
+  #else
+  precision mediump float;
+  #endif
+
+  out vec4 fragColor;
+  in vec2 texcoord;
+
+  uniform vec2 resolution;
+  uniform float time;
+
+  #define T time
+  #define S smoothstep
+
+  #define PI 3.14159265359
+  #define TAU 6.2831853072
+
+  vec3 palette(float k) {
+    vec3
+    a = vec3(.5),
+      b = vec3(.5),
+      c = vec3(1),
+      d = vec3(.9,.416,.577);
+
+    return a+b*cos(TAU*(c*k+d));
+  }
+
+  vec3 pattern(vec2 uv, float t) {
+    float d = 1.;
+    vec3 col = vec3(0);
+
+    for (float i=.0; i<3.; i++) {
+      float z = i == .0 ? t : .0,
+        r = length(uv), l = log(r),
+        a = atan(uv.x, uv.y);
+
+      bool cw = sign(t) > .0;
+
+      vec2 p = vec2(
+        a-l+(cw?z:.0),
+        a+l-(cw?.0:z)
+      )/PI;
+
+      uv = fract(p*2.)-.5;
+      d *= 1.-pow(r,.7);
+      col += S(.0,1.,d);
+
+      float e=exp(-125e-3/distance(p/TAU,.85/uv));
+      e=log(1e-5*e);
+      e *= 1.125;
+      e=pow(sin(e*30.)*2.,2.)*.125;
+      e=abs(e);
+      e=pow(5e-3/e, .25);
+
+      col -= .7*e * palette(length(uv)+i*.025+t*.25);
+    }
+
+    return col;
+  }
+
+  void main(void) {
+    vec2 uv = texcoord * (resolution / max(resolution.x, resolution.y));
+    vec3 col = pattern(uv*.5, T*.25);
+  
+    fragColor = vec4(col, 1);
+  }
+</script>
+<script type="x-shader/x-fragment" data-title="Morning">#version 300 es
+  /*********
+   * made by Matthias Hurrle (@atzedent)
+   */
+  #ifdef GL_FRAGMENT_PRECISION_HIGH
+  precision highp float;
+  #else
+  precision mediump float;
+  #endif
+
+  out vec4 fragColor;
+  in vec2 texcoord;
+
+  uniform vec2 resolution;
+  uniform float time;
+
+  #define T (time)
+  #define S smoothstep
+
+  #define TAU 6.2831853072
+
+  mat2 rot(float a) {
+    float s=sin(a), c=cos(a);
+    return mat2(c,-s,s,c);
+  }
+
+  vec3 palette(float k) {
+    vec3
+    a = vec3(.5),
+      b = vec3(.5),
+      c = vec3(1),
+      d = vec3(.9,.416,.577);
+
+    return a+b*cos(TAU*(c*k+d));
+  }
+
+  void main(void) {
+    vec2 uv = texcoord * (resolution / max(resolution.x, resolution.y));
+    vec3 col = vec3(0);
+    vec2 p=uv;
+
+    p = normalize(p)*log(length(p)*.05);
+    p *= rot(log(length(uv))-T*.6);
+    vec2 z = vec2(1, atan(p.y, p.x)/TAU*6.);
+    z = mod(z, 2.)-1.;
+    vec2 q = uv;
+    for (float i= .0; i<3.; i++) {
+      q=fract(q*2.)-.5;
+
+      float d=length(q)*exp(-length(uv));
+
+      d=sin(d*15.+T)*.125;
+      d=abs(d);
+      d=pow(1e-2/d, 1.2);
+
+      col += d;
+    }
+
+    col.xz *= rot(z.y+z.x);
+    col.xy *= rot(T*.3+cos(z.x)+sin(z.y));
+    col = mix(vec3(z.x,cos(z.x-z.y),z.y),vec3((col.r+col.g+col.b)/3.,z), z.y);
+    col = exp(-col*1.2);
+    col = sqrt(vec3(col.r*col.r+col.g*col.g+col.b*col.b))/3.;
+    col *= palette(5.2+sqrt(col.r*col.r+col.g*col.g+col.b*col.b)/3.);
+
+    fragColor = vec4(col, 1);
+  }
+</script>
+<script type="x-shader/x-fragment" data-title="Night">#version 300 es
+  /*********
+   * made by Matthias Hurrle (@atzedent)
+   */
+  #ifdef GL_FRAGMENT_PRECISION_HIGH
+  precision highp float;
+  #else
+  precision mediump float;
+  #endif
+
+  out vec4 fragColor;
+  in vec2 texcoord;
+
+  uniform vec2 resolution;
+  uniform float time;
+
+  #define T (time)
+  #define S smoothstep
+
+  #define TAU 6.2831853072
+
+  mat2 rot(float a) {
+    float s=sin(a), c=cos(a);
+    return mat2(c,-s,s,c);
+  }
+
+  vec3 palette(float k) {
+    vec3
+    a = vec3(.5,.5,.5),
+      b = vec3(.5,.5,.5),
+      c = vec3(1, 1, 1),
+      d = vec3(.0,.1,.2);
+
+    return a+b*cos(TAU*(c*k+d));
+  }
+
+  void main(void) {
+    vec2 uv = texcoord * (resolution / max(resolution.x, resolution.y));
+    vec3 col = vec3(0);
+    vec2 p=uv;
+
+    p = normalize(p)*log(length(p)*.05);
+    p *= rot(log(length(uv))-T*.6);
+
+    vec2 z = vec2(1, atan(p.y, p.x)/TAU*6.);
+    z = mod(z, 2.)-1.;
+    vec2 q = uv;
+    for (float i= .0; i<4.; i++) {
+      q=fract(q*2.)-.5;
+      float d=exp(-.125/log(length(q)));
+      d=sin(d*40.-T*1.4);
+      d=pow(d, 8.);
+      d=abs(d);
+      col += max(.0, d);
+    }
+
+    col.xz *= rot(z.y+z.x);
+    col.xy *= rot(T*.3+cos(z.x)+sin(z.y));
+    col = mix(vec3(z.x,cos(z.x-z.y),z.y),vec3((col.r+col.g+col.b)/3.,z), z.y);
+    col = exp(-col*1.2);
+    col = sqrt(vec3(col.r*col.r+col.g*col.g+col.b*col.b))/3.;
+    col *= palette(5.2+sqrt(col.r*col.r+col.g*col.g+col.b*col.b)/3.);
+
+    fragColor = vec4(col, 1);
+  }
+</script>
+<script type="x-shader/x-fragment" data-title="Noon">#version 300 es
+  /*********
+   * made by Matthias Hurrle (@atzedent)
+   */
+  #ifdef GL_FRAGMENT_PRECISION_HIGH
+  precision highp float;
+  #else
+  precision mediump float;
+  #endif
+
+  out vec4 fragColor;
+  in vec2 texcoord;
+
+  uniform vec2 resolution;
+  uniform float time;
+
+  #define T (time)
+  #define S smoothstep
+
+  #define TAU 6.2831853072
+
+  mat2 rot(float a) {
+    float s=sin(a), c=cos(a);
+    return mat2(c,-s,s,c);
+  }
+
+  vec3 palette(float k) {
+    vec3
+    a = vec3(.5,.5,.5),
+      b = vec3(.5,.5,.5),
+      c = vec3(1, .7, .4),
+      d = vec3(.0,.15,.2);
+
+    return a+b*cos(TAU*(c*k+d));
+  }
+
+  void main(void) {
+    vec2 uv = texcoord * (resolution / max(resolution.x, resolution.y));
+    vec3 col = vec3(0);
+    vec2 p=uv;
+
+    p = normalize(p)*log(length(p)*.05);
+    p *= rot(log(length(uv))-T*.6);
+    vec2 z = vec2(1, atan(p.y, p.x)*.5);
+    z = mod(z, 2.)-1.;
+    vec2 q = uv;
+    for (float i= .0; i<2.; i++) {
+      q*=rot(.78539816339);
+      q=fract(q*1.61803398875)-.5;
+      float d = exp(-length(q*.4));
+
+      d = log(1e-5*d);
+      d = sin(d*60.+T*1.4);
+      d = pow(.5/d, 4.);
+      d = abs(d);
+
+      col += d;
+      col = pow(col, vec3(1.2));
+    }
+
+    col = pow(S(.0, 20.,col), vec3(.4545));
+    col.xz *= rot(z.y+z.x);
+    col.xy *= rot(T*.3+cos(z.x)+sin(z.y));
+    col = mix(vec3(z.x,cos(z.x-z.y),z.y),vec3((col.r+col.g+col.b)/3.,z), z.y);
+    col = exp(-col*1.2);
+    col = sqrt(vec3(col.r*col.r+col.g*col.g+col.b*col.b))/3.;
+    col *= palette(7.5+sqrt(col.r*col.r+col.g*col.g+col.b*col.b)/3.);
+
+    fragColor = vec4(col, 1);
+  }
+</script>
+<script type="x-shader/x-fragment" data-title="Solver">#version 300 es
+  /*********
+   * made by Matthias Hurrle (@atzedent)
+   */
+  #ifdef GL_FRAGMENT_PRECISION_HIGH
+  precision highp float;
+  #else
+  precision mediump float;
+  #endif
+
+  out vec4 fragColor;
+  in vec2 texcoord;
+
+  uniform vec2 resolution;
+  uniform float time;
+  uniform int pointerCount;
+
+  #define P pointerCount
+  #define T time
+  #define S smoothstep
+ 
+  #define TAU 6.2831853072
+  #define PI 3.14159265
+
+  vec3 palette(float k) {
+    vec3
+    a = vec3(.5),
+    b = vec3(.5),
+    c = vec3(1),
+    d = vec3(.9,.416,.577);
+
+    return a+b*cos(TAU*(c*k+d));
+  }
+
+  vec3 tunnel(vec2 uv) {
+    float d = -(.5+.5*(sin(T*.2)*.5+.5))/tan(length(uv))-T;
+
+    vec2 p = vec2(d,atan(uv.y, uv.x))/PI;
+
+    p = fract(p*8.)-.5;
+
+    vec2 i = floor(p*8.+.5);
+
+    p.x += (i.x*i.y);
+
+    vec3 col = vec3(0);
+    float dots = length(p), aa = .0125;
+
+    col += max(
+      S(.5,.1, length(uv)),
+      S(
+        dots-aa,
+        dots+aa,
+        .25*(-cos(T*.05)*.5+.5)
+      )
+    );
+    col *= palette(d);
+    col -= S(.1,.075, length(uv));
+
+    return col;
+  }
+
+  mat2 rot(float a) {
+    float s = sin(a), c = cos(a);
+
+    return mat2(c, -s, s, c);
+  }
+
+  float rnd(vec2 p) {
+    return fract(sin(dot(p, p.yx+vec2(234, 654)))*345678.);
+  }
+
+  float rnd(float a) {
+    return fract(sin(a*234.56)*451.678);
+  }
+
+  float curve(float t, float e) {
+    t/=e;
+    return mix(
+      rnd(floor(t)),
+      rnd(floor(t)+1.),
+      pow(S(.0,1.,fract(t)),10.)
+    );
+  }
+
+  vec3 pattern(vec2 uv) {
+    float
+    t = 8.9,
+    a = 1.,
+    b = 1.,
+    c = 1.,
+    d = .0;
+
+    for (int i = 0; i < 10; i++) {
+      vec2 p = vec2(
+        cos(uv.y*a-d+t/b),
+        sin(uv.x*a-d+t/b)
+      ) / c;
+      p += vec2(-p.y, p.x)*.3;
+      uv.xy += p;
+
+      a *= 2.;
+      b *= 1.5;
+      c *= 1.75;
+
+      d += .05+.1*t*b;
+    }
+
+    return vec3(
+      sin(uv.x-t)*.5+.5,
+      sin(uv.y+t)*.5+.5,
+      sin((uv.x+uv.y+sin(t*.5))*.5)*.5+.5
+    );
+  }
+
+  vec3 shade(float a) {
+    return step(vec3(a), vec3(.5));
+  }
+
+  vec3 grid(vec2 uv) {
+    const float z = 6., n = 4.;
+    uv *= z;
+    
+    vec2 g = abs((fract(uv/n-.5)-.5)*n),
+    id = floor(uv/n+.5);
+    id = P > 0?id: mix(id, abs(id), step(sin(T*.33333),.0));
+
+    float cell = max(g.x, g.y), aa = .05;
+    
+    return mix(
+      vec3(0),
+      shade(
+        rnd(
+          vec2(log(length(vec2(234, 654)+id*100.)), atan(id.y, id.x))
+          +floor(10.*fract(-T*(floor(mod(T*4.,24.)) >= 16.?.6:.4)))
+        )
+      ),
+      S(cell-aa,cell+aa,1.5)
+    );
+  }
+
+  float map(vec3 p) {
+    p = abs(p)-1.;
+    return length(max(p,.0))+min(.0,max(max(p.x,p.y),p.z))-.005;
+  }
+
+  vec3 norm(vec3 p) {
+    mat3 k = mat3(p,p,p)-mat3(1e-3);
+    return normalize(map(p)-vec3(map(k[0]),map(k[1]),map(k[2])));
+  }
+
+  void cam(inout vec3 p) {
+    p.yz *= rot(sin(TAU*curve(T*.1,.05))*.5+.5);
+    p.xz *= rot(curve(PI*T*.05,.05));
+  }
+
+  vec3 cube(vec2 uv) {
+    vec3 col = vec3(0),
+    ro = vec3(0,0,exp(-cos(T))-6.),
+    rd = normalize(vec3(uv,1));
+
+    cam(ro);
+    cam(rd);
+
+    vec3 p = ro;
+
+    const float steps = 400., maxd = 100.;
+
+    for (float i=.0; i<steps; i++) {
+      float d=map(p);
+
+      if (d < 1e-3) {
+        vec3 n = abs(norm(p));
+        col += grid(p.xy)*n.z;
+        col += grid(p.xz)*n.y;
+        col += grid(p.yz)*n.x;
+
+        col -= pattern(p.xy)*n.z;
+        col -= pattern(p.xz)*n.y;
+        col -= pattern(p.yz)*n.x;
+        break;
+      }
+
+      if (d > maxd) {
+        col = tunnel(uv);
+        break;
+      }
+
+      p += rd*d;
+    }
+
+    return col;
+  }
+
+  void main(void) {
+    vec2 uv = texcoord * (resolution / max(resolution.x, resolution.y));
+    vec3 col = cube(uv);
+
+    fragColor = vec4(col, 1);
+  }
+</script>
+<!-- partial -->
+  <script  src="./script.js"></script>
+
+</body>
+</html>

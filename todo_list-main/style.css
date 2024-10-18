@@ -1,0 +1,234 @@
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+:root {
+  --theme-color: green;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.6rem;
+  color: #555;
+  font-family: sans-serif;
+  line-height: 1.4;
+  box-sizing: border-box;
+}
+
+.container {
+  min-height: 100vh;
+  position: relative;
+}
+
+button {
+  outline: none;
+  border: 1px solid blue;
+  font-size: 1.4rem;
+  color: blue;
+  margin-right: 2rem;
+  background: yellow;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.header {
+  background: var(--theme-color);
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem;
+  transition: all 0.5s;
+}
+.header__nav {
+  display: flex;
+}
+.header__list {
+  display: flex;
+  list-style: none;
+}
+.header__listItem {
+  position: relative;
+}
+.header__listItem button {
+  outline: none;
+  border: 1px solid blue;
+  font-size: 1.4rem;
+  color: blue;
+  margin-right: 2rem;
+  background: yellow;
+  border-radius: 10px;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.color-pallete {
+  padding: 2rem;
+  top: 3.9rem;
+  position: absolute;
+  background: rgba(170, 170, 170, 0.4);
+  width: 100%;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  display: none;
+}
+.color-pallete #closeThemePalleteBtn {
+  position: absolute;
+  color: var(--theme-color);
+  top: 0.6rem;
+  right: 1rem;
+  font-weight: 300;
+  cursor: pointer;
+  transition: all 0.5s;
+}
+.color-pallete span {
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  background: green;
+  margin: 0.5rem 0;
+  border-radius: 5px;
+  border: 1px solid black;
+}
+.color-pallete .color--red {
+  background: red;
+}
+
+.backdrop {
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  display: none;
+}
+
+.modalAdd {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 200;
+  display: none;
+}
+.modalAdd form {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
+  padding: 2rem;
+  background: white;
+}
+.modalAdd form input,
+.modalAdd form select {
+  padding: 0.5rem 2rem;
+  margin-bottom: 1rem;
+  border-radius: 3px;
+  font-size: 1.6rem;
+  border: 2px solid green;
+  outline: none;
+}
+.modalAdd form button {
+  outline: none;
+  border: 1px solid blue;
+  font-size: 1.2rem;
+  color: blue;
+  margin-right: 2rem;
+  background: orange;
+  border-radius: 10px;
+  padding: 0.3rem 0.7rem;
+  cursor: pointer;
+}
+
+.container {
+  position: relative;
+}
+
+.labelGroup {
+  display: flex;
+  justify-content: center;
+  margin: 2rem auto;
+}
+.labelGroup input {
+  display: none;
+  cursor: pointer;
+}
+.labelGroup input:checked + label {
+  background: lightgreen;
+  border-radius: 5px;
+}
+.labelGroup label {
+  margin-right: 2rem;
+  padding: 0.2rem 1rem;
+  color: var(--theme-color);
+  border-bottom: 1px solid green;
+  cursor: pointer;
+  transition: all 0.5s;
+}
+
+#todos {
+  padding: 2rem;
+  border: 3px solid var(--theme-color);
+  width: 80%;
+  margin: 0 auto;
+  transition: all 0.5s;
+}
+
+.todo {
+  padding: 2rem;
+  box-shadow: 0 0.5rem 0.7rem rgba(0, 0, 0, 0.2);
+  position: relative;
+  max-width: 50rem;
+  text-align: center;
+  margin: 2rem auto;
+  overflow: hidden;
+}
+.todo__heading {
+  font-size: 2.2rem;
+  color: green;
+}
+.todo__buttons button {
+  font-size: 1rem;
+  background: blue;
+  color: white;
+  border: none;
+}
+.todo__buttons .btn--work {
+  background: blue;
+}
+.todo__buttons .btn--home {
+  background: orange;
+}
+.todo__buttons .btn--general {
+  background: red;
+}
+.todo .label {
+  display: inline-block;
+  position: absolute;
+  top: 0%;
+  right: 0%;
+  transform: rotateZ(45deg) translateX(25%) translateY(-45%);
+  transform-origin: center;
+  color: white;
+  background: orange;
+  padding: 0.2rem 3rem;
+}
+.todo .label--work {
+  background: blue;
+}
+.todo .label--home {
+  background: orange;
+}
+.todo .label--general {
+  background: red;
+}

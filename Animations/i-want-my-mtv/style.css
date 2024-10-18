@@ -1,0 +1,62 @@
+*,
+*:before,
+*:after {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+*:before,
+*:after {
+	position: absolute;
+	content: "";
+}
+
+:root {
+	--logo-width: 40vw;
+	--stroke-color: #193eda;
+}
+
+html {
+	background-color: #dad2f3;
+	background-image: linear-gradient(315deg, #fba8a4 0%, #dad2f3 74%);
+}
+
+body {
+	background: ;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+	width: 100%;
+	background: url(https://mir-s3-cdn-cf.behance.net/project_modules/fs/4e0cc328008799.56e41b35c50a5.gif)
+		center center / cover no-repeat;
+}
+
+svg image {
+	width: auto;
+	height: 100%;
+}
+
+#mtv-logo {
+	position: relative;
+	width: calc(var(--logo-width) - calc(var(--logo-width) / 5.6));
+	height: calc(var(--logo-width) / 1.28);
+	max-height: 80vh;
+}
+
+#mtv-logo svg {
+	position: absolute;
+	width: var(--logo-width);
+	height: inherit;
+	max-height: 80vh;
+}
+
+.colors {
+	fill: #dfcefd;
+	stroke: var(--stroke-color);
+}
+
+.outline {
+	fill: var(--stroke-color);
+}

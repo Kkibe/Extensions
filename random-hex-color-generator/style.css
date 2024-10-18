@@ -1,0 +1,169 @@
+@keyframes pop {
+  0% {
+    width: 0px;
+    height: 0px;
+  }
+  100% {
+    width: 100px;
+    height: 100px;
+  }
+}
+@keyframes popText {
+  0% {
+    font-size: 0;
+  }
+  100% {
+    font-size: 1.4rem;
+  }
+}
+@keyframes flip {
+  100% {
+    transform: rotate(720deg);
+  }
+}
+@keyframes copiedMsg {
+  0% {
+    opacity: 1;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    top: 40%;
+  }
+}
+body {
+  height: 100%;
+  font-family: "PT Sans", cursive;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.wrapper_palette {
+  flex-direction: row-reverse;
+  justify-content: center;
+  flex-wrap: wrap-reverse;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.btn {
+  position: relative;
+  z-index: 999;
+  width: 50px;
+  height: 50px;
+  background: #5CAAFF;
+  border: none;
+  color: white;
+  border-radius: 50%;
+}
+.btn:hover {
+  cursor: pointer;
+}
+.btn:focus {
+  outline: none;
+}
+.btn_go {
+  margin-top: 20px;
+  transition: all 0.5s;
+}
+.btn_go:hover {
+  background: white;
+  color: #5CAAFF;
+  border: 1px solid #5CAAFF;
+  animation: flip 1s 1;
+  transition: all 1s;
+}
+.btn .fa {
+  font-size: 1.5rem;
+}
+
+.colorCircle {
+  position: relative;
+  font-size: 1.4rem;
+  width: 100px;
+  height: 100px;
+  background: #5CAAFF;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  box-shadow: 1px 1px 5px #0F0F0F;
+  transition-property: box-shadow;
+  transition-duration: 0.3s;
+  animation: pop 1s 1;
+}
+.colorCircle:hover {
+  box-shadow: 4px 4px 4px darkgray;
+  transition-property: box-shadow;
+  transition-duration: 0.3s;
+}
+.colorCircle input {
+  font-family: "PT Sans";
+  font-size: 1.4rem;
+  text-align: center;
+  background: none;
+  border: none;
+  color: white;
+  width: 110px;
+  animation: popText 1s 1;
+}
+.colorCircle input:focus {
+  outline: none;
+}
+
+.btn_copy {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: none;
+  color: white;
+  height: 25px;
+  width: 25px;
+  border: 2px solid white;
+  border-radius: 50%;
+  transition: all 0.3s;
+}
+.btn_copy:hover {
+  cursor: copy;
+  background: white;
+  color: #5CAAFF;
+  transition: all 0.3s;
+}
+.btn_copy:focus {
+  outline: none;
+}
+
+.clickMe {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 5rem;
+  color: #5CAAFF;
+  text-shadow: 3px 3px 3px darkgray;
+}
+
+.ok-msg {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 10px;
+  border: 2px solid #5CAAFF;
+  color: #5CAAFF;
+  border-radius: 5px;
+  background: white;
+  font-size: 3.5rem;
+  opacity: 0;
+  animation: copiedMsg 3s 1;
+}

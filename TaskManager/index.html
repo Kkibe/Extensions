@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Tasker</title>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css'><link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<body class="">
+	<section class="header"></section>
+	<div class="container">
+    <div class="row title-theme">
+		  <h1 class="title">Todo</h1>
+      <label for="switch-l">
+        <i class="fa fa-moon-o"></i>
+      </label>
+      <input type="checkbox" id="switch-l">
+    </div>
+    <div class="row todo-input">
+      <form action="" onsubmit="event.preventDefault();">
+        <input class="new-task" type="text" placeholder="Create a new task...">
+      </form>
+    </div>
+
+    <div class="todos">
+      <ul id="todo-list">
+        <!--<li class="todo-list-task">
+          <input type="checkbox" class="todo-list-checkbox" id="todo-list-checkbox0">
+          <label for="todo-list-checkbox0"></label>
+          <p class="todo-list-title">Daily sport (run for 20 min) </p>
+          <a href="javascript:void(0)" class="todo-list-remove close"></a>
+         </li>
+        <li class="todo-list-task">
+          <input type="checkbox" class="todo-list-checkbox" id="todo-list-checkbox1">
+          <label for="todo-list-checkbox1"></label>
+          <p class="todo-list-title">Read one article in computer science</p>
+          <a href="javascript:void(0)" class="todo-list-remove close"></a>
+         </li>
+        <li class="todo-list-task">
+          <input type="checkbox" class="todo-list-checkbox" id="todo-list-checkbox2">
+          <label for="todo-list-checkbox2"></label>
+          <p class="todo-list-title">Make some challenges for javascript and create personal projects</p>
+          <a href="javascript:void(0)" class="todo-list-remove close"></a>
+         </li>
+        <li class="todo-list-task">
+          <input type="checkbox" class="todo-list-checkbox" id="todo-list-checkbox3">
+          <label for="todo-list-checkbox3"></label>
+          <p class="todo-list-title">Practice your language for 30 min</p>
+          <a href="javascript:void(0)" class="todo-list-remove close"></a>
+         </li>-->
+      </ul>
+      <div id="controls">
+        <span class="left-items">0 item left</span>
+        <ul class="controls-list">
+          <li class="active"><a href="javascript:void(0)" class="all-btn">All</a></li>
+          <li><a href="javascript:void(0)" class="active-btn">Active</a></li>
+          <li><a href="javascript:void(0)" class="completed-btn">Completed</a></li>
+        </ul>
+        <a href="javascript:void(0)" id="clear-all">Clear All</a>
+      </div>
+    </div>
+	</div>
+</body>
+<!-- partial -->
+  <script  src="./script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,62 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons+Outlined");
+
+*, *::after, *::before{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-size: 10px;
+  font-family: "Roboto", sans-serif;
+  position: relative;
+  background-color: #89d4fe;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+ul{
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  list-style-type: none;
+  font-size: 1rem;
+  transition: all 0.4s;
+  
+  background-color: #c0d8ec;
+  position: absolute;
+  padding: 4px 4px;
+  bottom: 0;
+}
+
+li{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  transition: top 0.2s ease-out, width 0.4s, border-radius 0.4s, box-shadow 0.4s;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+li:last-of-type::after{
+  content: "+";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  transition: top 0.2s ease-out, width 0.4s, border-radius 0.4s, box-shadow 0.4s;
+  border-radius: 50%;
+  cursor: pointer;
+  background-color: #1c4e1a66;
+}
+
+.active{
+  color: #1b35a7;
+  box-shadow: 1px 2px 2px 1px #1c4e1a66;
+}

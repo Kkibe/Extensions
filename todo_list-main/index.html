@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - A Pen by Charles kibet</title>
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=">
+  <title></title>
+</head>
+<body>
+  <header class="header">
+    <nav class="header__nav">
+      <ul class="header__list">
+        <li class="header__listItem"><button id="showModalBtn">Add Todo</button></li>
+        <li class="header__listItem">
+          <div>
+            <button id="themeChangeBtn">Theme</button>
+            <div class="color-pallete">
+              <p id="closeThemePalleteBtn">X</p>
+              <span style="background:red"></span>
+              <span style="background:yellow"></span>
+              <span style="background:pink"></span>
+              <span style="background:steelblue"></span>
+              <span style="background:black"></span>
+              <span style="background:green"></span>
+            </div>
+          </div>
+          
+        </li>
+      </ul>
+    </nav>
+  </header>
+  
+  <main class="container">
+    <div class="backdrop"></div>
+  <div class="modalAdd">
+    <form action="">
+     <input id="todoHeadingInput" type="text" placeholder="Title">
+      <input id="todoHeadingDesc" type="text" placeholder="Description">
+      <select id="todoHeadingLabel">
+        <option value="work">Work</option>
+         <option value="home">Home</option>
+         <option value="general">General</option>
+      </select>
+      <div class="group">
+        <button id="todoAddBtn">Add</button>
+      <button id="todoCancelBtn">Cancel</button>
+      </div>
+      
+      
+    </form>
+  </div>
+    <div class="labelGroup">
+      <input type="radio" id="allLabel" name="labelValue">
+      <label for="allLabel">All</label>
+      
+     <input type="radio" id="workLabel" name="labelValue">
+      <label for="workLabel">Work</label>
+      
+      
+      <input type="radio" id="homeLabel" name="labelValue">
+      <label for="homeLabel" >Home</label>
+      
+      <input type="radio" id="generalLabel" name="labelValue">
+      <label for="generalLabel" >General</label>
+
+    </div>
+    <div id="todos">    
+    </div>
+  </main>
+</body>
+</html>
+<!-- partial -->
+  <script  src="./script.js"></script>
+
+</body>
+</html>
